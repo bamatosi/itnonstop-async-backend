@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -23,19 +24,31 @@ public class PaymentsController {
     @Autowired
     PaymentsMocks mocks;
 
-    @RequestMapping(value = "/payment/{paymentId}", method = GET, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/payments/{paymentId}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity getDetails(@PathVariable("paymentId") int paymentId) {
-        PaymentDetails data = mocks.getPaymentDetails(paymentId);
+        PaymentDetails data = mocks.getPayment(paymentId);
         return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/payment/types/{type}", method = GET, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/payments", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity getAllPayments() {
+        List<PaymentDetails> data = mocks.getAllPayments();
+        return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/payments/types", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity getTypes() {
+        List<String> data = mocks.getAllPaymentTypes();
+        return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/payments/types/{type}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity getTypeDetails(@PathVariable("type") String type) {
         PaymentTypeDetails data = mocks.getPaymentTypeDetails(type);
         return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/payment/{paymentId}/headers/{type}", method = GET, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/payments/{paymentId}/headers/{type}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity getHeaders(@PathVariable("paymentId") int paymentId, @PathVariable("type") String type) {
         Map<String, String> data = mocks.getHeaders(paymentId, type);
         return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
