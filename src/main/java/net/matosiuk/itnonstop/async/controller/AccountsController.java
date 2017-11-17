@@ -1,5 +1,6 @@
 package net.matosiuk.itnonstop.async.controller;
 
+import net.matosiuk.itnonstop.async.Configuration;
 import net.matosiuk.itnonstop.async.controller.response.Response;
 import net.matosiuk.itnonstop.async.model.AccountDetails;
 import net.matosiuk.itnonstop.async.model.Deal;
@@ -23,20 +24,26 @@ public class AccountsController {
     @Autowired
     AccountsMocks mocks;
 
+    @Autowired
+    Configuration config;
+
     @RequestMapping(value = "/accounts/{accountId}", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity getAccountDetails(@PathVariable("accountId") int accountId) {
+    public ResponseEntity getAccountDetails(@PathVariable("accountId") int accountId) throws InterruptedException {
+        Thread.sleep(config.getRandomSleepTime());
         Object data = mocks.getAccountData(accountId);
         return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/accounts", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity getAccounts() {
+    public ResponseEntity getAccounts() throws InterruptedException {
+        Thread.sleep(config.getRandomSleepTime());
         List<AccountDetails> data = mocks.getAllAccounts();
         return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/accounts/{accountId}/deals", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity getDeals(@PathVariable("accountId") int accountId) {
+    public ResponseEntity getDeals(@PathVariable("accountId") int accountId) throws InterruptedException {
+        Thread.sleep(config.getRandomSleepTime());
         List<Deal> data = mocks.getDeals(accountId);
         return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
     }

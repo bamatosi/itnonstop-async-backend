@@ -1,5 +1,6 @@
 package net.matosiuk.itnonstop.async.controller;
 
+import net.matosiuk.itnonstop.async.Configuration;
 import net.matosiuk.itnonstop.async.controller.response.Response;
 import net.matosiuk.itnonstop.async.model.PaymentDetails;
 import net.matosiuk.itnonstop.async.model.Permissions;
@@ -21,8 +22,12 @@ public class PermissionsController {
     @Autowired
     PermissionsMocks mocks;
 
+    @Autowired
+    Configuration config;
+
     @RequestMapping(value = "/permissions/{userId}", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity getPermissions(@PathVariable("userId") int userId) {
+    public ResponseEntity getPermissions(@PathVariable("userId") int userId) throws InterruptedException {
+        Thread.sleep(config.getRandomSleepTime());
         Permissions data = mocks.getPermissions(userId);
         return new ResponseEntity<>(new Response().addData(data), HttpStatus.OK);
     }
